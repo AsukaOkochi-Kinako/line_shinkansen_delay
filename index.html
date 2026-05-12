@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#FF9A56" />
+  <title>🐾 どうぶつインディアンポーカー</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="app" id="app">
+
+  <!-- 背景の浮かぶ動物 -->
+  <div class="bg-animals" id="bg-animals"></div>
+
+  <!-- ==================== ホーム画面 ==================== -->
+  <div class="screen active" id="s-home">
+    <div class="home-emoji-row">
+      <span>🐶</span><span>🦁</span><span>🐼</span><span>🦊</span><span>🐨</span>
+    </div>
+
+    <div class="screen-title" style="font-size: 2.8rem; margin-bottom: 16px;">
+      どうぶつ<br>インディアン<br>ポーカー
+    </div>
+
+    <div class="card" style="text-align: center; margin-bottom: 24px;">
+      <p style="color: #555; font-size: 0.95rem; line-height: 2.1;">
+        🎯 自分のどうぶつがわからないまま<br>
+        みんなでヒントを出し合おう！<br>
+        <strong style="color: #FF6B35;">ウソはだめ！直接言うのもだめ！</strong>
+      </p>
+    </div>
+
+    <button class="btn btn-orange" onclick="go('setup')">あそぶ！🎮</button>
+    <button class="btn btn-white"  onclick="showRules()">ルールを見る 📖</button>
+  </div>
+
+  <!-- ==================== ルール画面 ==================== -->
+  <div class="screen" id="s-rules">
+    <div class="screen-title">ルール</div>
+
+    <div class="card">
+      <div class="rules-list">
+        <div>📱 スタートを押したら<strong>すぐにおでこにかざす</strong></div>
+        <div>⏱️ ５秒後に動物が画面に表示される</div>
+        <div>🙈 <strong>自分のどうぶつを見てはいけない</strong></div>
+        <div>💬 みんなが<strong>ヒントを教え合う</strong></div>
+        <div>🚫 ウソのヒントはだめ</div>
+        <div>🚫 動物の名前を直接言うのもだめ</div>
+        <div>🎯 自分のどうぶつを当てよう！</div>
+      </div>
+    </div>
+
+    <button class="btn btn-orange" onclick="go('home')" style="margin-top: 16px;">もどる</button>
+  </div>
+
+  <!-- ==================== 人数選択画面 ==================== -->
+  <div class="screen" id="s-setup">
+    <div class="screen-title" style="margin-bottom: 24px;">何人でやる？</div>
+
+    <div class="card">
+      <div class="count-grid">
+        <button class="count-btn" onclick="startGame(2)">2<small>にん</small></button>
+        <button class="count-btn" onclick="startGame(3)">3<small>にん</small></button>
+        <button class="count-btn" onclick="startGame(4)">4<small>にん</small></button>
+        <button class="count-btn" onclick="startGame(5)">5<small>にん</small></button>
+        <button class="count-btn" onclick="startGame(6)">6<small>にん</small></button>
+        <button class="count-btn" onclick="startGame(7)">7<small>にん</small></button>
+        <button class="count-btn" onclick="startGame(8)">8<small>にん</small></button>
+        <button class="count-btn" onclick="startGame(9)">9<small>にん</small></button>
+      </div>
+    </div>
+
+    <button class="btn btn-white" onclick="go('home')" style="margin-top: 12px; font-size: 1rem;">もどる</button>
+  </div>
+
+  <!-- ==================== ターン準備画面 ==================== -->
+  <div class="screen" id="s-turn">
+    <div class="progress-wrap" id="progress"></div>
+
+    <div class="player-badge" id="turn-name"></div>
+    <div class="screen-title" style="font-size: 2rem; margin-bottom: 8px;">のばんだよ！</div>
+
+    <div class="card" style="text-align: center;">
+      <div style="font-size: 3.2rem; margin-bottom: 10px;">📱⬆️</div>
+      <p style="color: #555; font-size: 1.05rem; line-height: 2.1;">
+        スマホをうけとったら<br>
+        スタートボタンを押して<br>
+        <strong style="color: #FF6B35;">すぐにおでこにかざしてね！</strong><br>
+        <span style="font-size: 0.85rem; color: #aaa;">（画面をそとに向けて）</span>
+      </p>
+    </div>
+
+    <button class="btn btn-blue" onclick="startCountdown()" style="margin-top: 20px;">
+      スタート！🚀
+    </button>
+  </div>
+
+  <!-- ==================== カウントダウン画面 ==================== -->
+  <div class="screen" id="s-countdown">
+    <!-- イエロー背景なのでネイビー文字に -->
+    <p style="color: #1A1A2E; font-size: 1.1rem; font-weight: 700; margin-bottom: 20px; letter-spacing: 0.05em;">
+      📱 おでこにかざして！
+    </p>
+    <div class="countdown-num" id="countdown-num">5</div>
+    <p style="color: rgba(26,26,46,0.55); font-size: 0.95rem; margin-top: 28px;">
+      見ちゃだめだよ…！
+    </p>
+  </div>
+
+  <!-- ==================== 動物表示画面 ==================== -->
+  <div class="screen" id="s-animal">
+    <p style="color: rgba(255,255,255,0.8); font-size: 1rem; margin-bottom: 2px;"
+       id="animal-who"></p>
+    <p style="color: #fff; font-size: 1.35rem; font-weight: 700; margin-bottom: 20px;">
+      のどうぶつは…！
+    </p>
+
+    <span class="animal-big" id="animal-show"></span>
+
+    <div class="hint-card">
+      <p style="font-size: 0.95rem; line-height: 2.2;">
+        👀 みんなでよく見てね！<br>
+        ヒントをあげよう！<br>
+        <strong>動物の名前は言っちゃだめ！</strong>
+      </p>
+    </div>
+
+    <button class="btn btn-yellow"
+      onclick="showGuessScreen()"
+      style="margin-top: 18px; max-width: 260px; font-size: 1.15rem;">
+      こたえあわせ！🎯
+    </button>
+  </div>
+
+  <!-- ==================== こたえあわせ画面 ==================== -->
+  <div class="screen" id="s-guess">
+    <div class="guess-icon" style="display: flex; align-items: center; justify-content: center;">🤔</div>
+
+    <div class="player-badge" id="guess-name"></div>
+    <div class="screen-title" style="font-size: 1.85rem; margin-bottom: 6px;">
+      のこたえは？
+    </div>
+
+    <div class="card" style="text-align: center;">
+      <p style="color: #666; font-size: 0.95rem; line-height: 2; margin-bottom: 16px;">
+        声に出してこたえてから<br>ボタンを押してね！
+      </p>
+      <button class="btn btn-green"  onclick="showResult(true)"  style="max-width: 100%; font-size: 1.25rem;">⭕ あたった！</button>
+      <button class="btn btn-yellow" onclick="showResult(false)" style="max-width: 100%; font-size: 1.25rem;">❌ ちがった…</button>
+    </div>
+  </div>
+
+  <!-- ==================== 結果画面 ==================== -->
+  <div class="screen" id="s-result">
+    <div class="result-icon" id="r-icon"></div>
+    <div class="result-label"  id="r-text"></div>
+    <span class="result-animal" id="r-animal"></span>
+    <div class="result-animal-name" id="r-animal-name"></div>
+    <button class="btn btn-white" id="r-next" onclick="nextPlayer()" style="margin-top: 4px;"></button>
+  </div>
+
+  <!-- ==================== ゲームオーバー画面 ==================== -->
+  <div class="screen" id="s-over">
+    <div class="celebrate">🎊🎉🎊</div>
+    <div class="screen-title" style="margin-bottom: 16px;">ゲームしゅうりょう！</div>
+
+    <div class="card">
+      <div id="final-list"></div>
+    </div>
+
+    <button class="btn btn-orange" onclick="restartGame()" style="margin-top: 16px;">もう一回！🎮</button>
+    <button class="btn btn-white"  onclick="go('home')" style="font-size: 1rem;">タイトルへ</button>
+  </div>
+
+</div><!-- /app -->
+
+<script src="game.js"></script>
+</body>
+</html>
